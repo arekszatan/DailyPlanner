@@ -15,6 +15,17 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_nextDatButton_clicked();
+
+    void on_previousDayButton_clicked();
+
+    void on_addDay1_clicked();
+
+    void on_addDay2_clicked();
+
+    void on_addDay3_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "task.h"
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -20,11 +22,11 @@ private slots:
 
     void on_previousDayButton_clicked();
 
-    void on_addDay1_clicked();
+    void on_addDayWindow1_clicked();
 
-    void on_addDay2_clicked();
+    void on_addDayWindow2_clicked();
 
-    void on_addDay3_clicked();
+    void on_addDayWindow3_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -33,5 +33,5 @@ Task::~Task()
 
 void Task::buttonClicked()
 {
-    printf("clicked");
+    delete this;
 }

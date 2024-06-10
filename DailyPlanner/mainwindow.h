@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "task.h"
 #include <QMessageBox>
+#include <QDebug>>
+#include "db.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -30,5 +32,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    int busyTime[1440];
+    DB db;
 };
 #endif // MAINWINDOW_H

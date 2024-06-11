@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "db.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -19,6 +18,11 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::rmDbItem(Task *task)
+{
+    qInfo() << task->getIndexTime();
 }
 
 
@@ -67,11 +71,16 @@ void MainWindow::on_addDayWindow1_clicked()
     QDate previousDay = currentDate.addDays(-1);
     int julianDay = previousDay.toJulianDay();
     if (!addTaskToDataBase(startTimeInt, endTimeInt, text, julianDay))
+    {
+        QMessageBox::information(nullptr, "Problem", "Czas zadania pokrywa się z istniejącym zadaniem");
         return;
+    }
     QString timeText = startTime.toString("HH:mm") + "->" + endTime.toString("HH:mm");
-    Task *task = new Task(nullptr, ui->textWindow1->text(), timeText);
+    Task *task = new Task(nullptr, ui->textWindow1->text(), timeText, startTimeInt);
     connect(this, &MainWindow::removeAll, task, &Task::removeAllSlot);
-    ui->day1layout->addWidget(task);
+    connect(task, &Task::removeFromDb, this, &MainWindow::rmDbItem);
+    ui->day1layout->insertWidget(getIndexToSort(ui->day1layout, startTimeInt), task);
+//    ui->day1layout->addWidget(task);
     ui->textWindow1->clear();
 }
 
@@ -95,9 +104,12 @@ void MainWindow::on_addDayWindow2_clicked()
     }
     int julianDay = currentDate.toJulianDay();
     if (!addTaskToDataBase(startTimeInt, endTimeInt, text, julianDay))
+    {
+        QMessageBox::information(nullptr, "Problem", "Czas zadania pokrywa się z istniejącym zadaniem");
         return;
+    }
     QString timeText = startTime.toString("HH:mm") + "->" + endTime.toString("HH:mm");
-    Task *task = new Task(nullptr, ui->textWindow2->text(), timeText);
+    Task *task = new Task(nullptr, ui->textWindow2->text(), timeText, startTimeInt);
     connect(this, &MainWindow::removeAll, task, &Task::removeAllSlot);
     ui->day2layout->addWidget(task);
     ui->textWindow2->clear();
@@ -124,9 +136,12 @@ void MainWindow::on_addDayWindow3_clicked()
     QDate nextDay = currentDate.addDays(-1);
     int julianDay = nextDay.toJulianDay();
     if (!addTaskToDataBase(startTimeInt, endTimeInt, text, julianDay))
+    {
+        QMessageBox::information(nullptr, "Problem", "Czas zadania pokrywa się z istniejącym zadaniem");
         return;
+    }
     QString timeText = startTime.toString("HH:mm") + "->" + endTime.toString("HH:mm");
-    Task *task = new Task(nullptr, ui->textWindow3->text(), timeText);
+    Task *task = new Task(nullptr, ui->textWindow3->text(), timeText, startTimeInt);
     connect(this, &MainWindow::removeAll, task, &Task::removeAllSlot);
     ui->day3layout->addWidget(task);
     ui->textWindow3->clear();
@@ -136,6 +151,24 @@ bool MainWindow::addTaskToDataBase(int timeStart, int timeEnd, QString text, int
 {
     if (db.connect(path))
     {
+        QList<QList<QString>> data = db.fetchData("tasks");
+        for (const auto &row : data)
+        {
+//            qInfo() << day << row.at()
+            if (day != row.at(3).toInt())
+                continue;
+            qInfo() << "xd" << timeStart << row.at(1).toInt() << row.at(0).toInt();
+            if (timeStart >= row.at(0).toInt() and timeStart < row.at(1).toInt())
+            {
+                db.disconnect();
+                return false;
+            }
+            if (timeEnd > row.at(0).toInt() and timeEnd <= row.at(1).toInt())
+            {
+                db.disconnect();
+                return false;
+            }
+        }
         QStringList values = {
             QString::number(timeStart),
             QString::number(timeEnd),
@@ -151,6 +184,21 @@ bool MainWindow::addTaskToDataBase(int timeStart, int timeEnd, QString text, int
     return false;
 }
 
+int MainWindow::getIndexToSort(QHBoxLayout *layout, int timeActualItem)
+{
+    int insertIndex = 0;
+    for (int i = 0; i < layout->count(); ++i) {
+        QWidget *widget = layout->itemAt(i)->widget();
+        if (widget) {
+            Task *taskInLayout = qobject_cast<Task*>(widget);
+            if (taskInLayout && taskInLayout->getIndexTime() < timeActualItem) {
+                insertIndex = i + 1;
+            }
+        }
+    }
+    return insertIndex;
+}
+
 void MainWindow::getValueFromDb()
 {
     emit removeAll();
@@ -162,32 +210,31 @@ void MainWindow::getValueFromDb()
         for (const auto &row : data) {
             if (julianDay - 1 == row.at(3).toInt()) // actual
             {
-                QTime startTime = QTime(0, row.at(0).toInt() / 60, row.at(0).toInt() % 60);
-                QTime endTime = QTime(0, row.at(1).toInt() / 60, row.at(1).toInt() % 60);
+                QTime startTime = QTime(row.at(0).toInt() / 60, row.at(0).toInt() % 60);
+                QTime endTime = QTime(row.at(1).toInt() / 60, row.at(1).toInt() % 60);
                 QString timeText = startTime.toString("HH:mm") + "->" + endTime.toString("HH:mm");
-                Task *task = new Task(nullptr, row.at(2), timeText);
+                Task *task = new Task(nullptr, row.at(2), timeText, row.at(0).toInt());
                 connect(this, &MainWindow::removeAll, task, &Task::removeAllSlot);
                 ui->day1layout->addWidget(task);
             }
             else if (julianDay == row.at(3).toInt()) // prev
             {
-                QTime startTime = QTime(0, row.at(0).toInt() / 60, row.at(0).toInt() % 60);
-                QTime endTime = QTime(0, row.at(1).toInt() / 60, row.at(1).toInt() % 60);
+                QTime startTime = QTime(row.at(0).toInt() / 60, row.at(0).toInt() % 60);
+                QTime endTime = QTime(row.at(1).toInt() / 60, row.at(1).toInt() % 60);
                 QString timeText = startTime.toString("HH:mm") + "->" + endTime.toString("HH:mm");
-                Task *task = new Task(nullptr, row.at(2), timeText);
+                Task *task = new Task(nullptr, row.at(2), timeText, row.at(0).toInt());
                 connect(this, &MainWindow::removeAll, task, &Task::removeAllSlot);
                 ui->day2layout->addWidget(task);
             }
             else if (julianDay + 1 == row.at(3).toInt()) // next
             {
-                QTime startTime = QTime(0, row.at(0).toInt() / 60, row.at(0).toInt() % 60);
-                QTime endTime = QTime(0, row.at(1).toInt() / 60, row.at(1).toInt() % 60);
+                QTime startTime = QTime(row.at(0).toInt() / 60, row.at(0).toInt() % 60);
+                QTime endTime = QTime(row.at(1).toInt() / 60, row.at(1).toInt() % 60);
                 QString timeText = startTime.toString("HH:mm") + "->" + endTime.toString("HH:mm");
-                Task *task = new Task(nullptr, row.at(2), timeText);
+                Task *task = new Task(nullptr, row.at(2), timeText, row.at(0).toInt());
                 connect(this, &MainWindow::removeAll, task, &Task::removeAllSlot);
                 ui->day3layout->addWidget(task);
             }
-            qInfo() << row.at(0);
         }
         db.disconnect();
     }

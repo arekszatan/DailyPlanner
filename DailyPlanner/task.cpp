@@ -1,12 +1,12 @@
 #include "task.h"
 #include <QDebug>
 
-Task::Task(QWidget *parent, QString taskText, QString timeText)
+Task::Task(QWidget *parent, QString taskText, QString timeText, int indexTime)
     : QFrame(parent)
 {
     _taskText = taskText;
     _timeText = timeText;
-
+    _indexTime = indexTime;
     this->setFrameShape(QFrame::Box);
     this->setLineWidth(2);
 
@@ -32,8 +32,14 @@ Task::~Task()
     delete gridLayout;
 }
 
+int Task::getIndexTime()
+{
+    return _indexTime;
+}
+
 void Task::buttonClicked()
 {
+    emit removeFromDb(this);
     delete this;
 }
 

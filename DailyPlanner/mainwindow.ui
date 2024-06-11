@@ -147,7 +147,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
        </item>
        <item>
         <widget class="QWidget" name="day1" native="true">
-         <layout class="QHBoxLayout" name="day1layout">
+         <layout class="QHBoxLayout" name="sda">
           <item>
            <widget class="QWidget" name="addedWindow1" native="true">
             <property name="minimumSize">
@@ -269,12 +269,17 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QWidget" name="widget" native="true">
+            <layout class="QHBoxLayout" name="day1layout"/>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
        <item>
         <widget class="QWidget" name="day2" native="true">
-         <layout class="QHBoxLayout" name="day2layout">
+         <layout class="QHBoxLayout" name="dasdasas">
           <item>
            <widget class="QWidget" name="addedWindow2" native="true">
             <layout class="QGridLayout" name="gridLayout_3">
@@ -390,12 +395,17 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QWidget" name="widget_2" native="true">
+            <layout class="QHBoxLayout" name="day2layout"/>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
        <item>
         <widget class="QWidget" name="day3" native="true">
-         <layout class="QHBoxLayout" name="day3layout">
+         <layout class="QHBoxLayout" name="dsadadadsad">
           <item>
            <widget class="QWidget" name="addedWindow3" native="true">
             <layout class="QGridLayout" name="gridLayout_4">
@@ -509,6 +519,11 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_3" native="true">
+            <layout class="QHBoxLayout" name="day3layout"/>
            </widget>
           </item>
          </layout>

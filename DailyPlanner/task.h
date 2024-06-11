@@ -5,13 +5,15 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QGridLayout>
+#include "db.h"
 
 class Task : public QFrame {
     Q_OBJECT
 
 public:
-    Task(QWidget *parent = nullptr, QString taskText = "None", QString timeText = "00:00");
+    Task(QWidget *parent = nullptr, QString taskText = "None", QString timeText = "00:00", int indexTime = -1);
     ~Task();
+    int getIndexTime();
 
 private:
     QString _taskText;
@@ -21,7 +23,10 @@ private:
     QPushButton *editButton;
     QPushButton *deleteButton;
     QGridLayout *gridLayout;
-
+    int _indexTime;
+    //DB db;
+signals:
+    void removeFromDb(Task *task);
 private slots:
     void buttonClicked();
 public slots:

@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "task.h"
 #include <QMessageBox>
-#include <QDebug>>
+#include <QDebug>
 #include "db.h"
 
 QT_BEGIN_NAMESPACE
@@ -30,9 +30,16 @@ private slots:
 
     void on_addDayWindow3_clicked();
 
+signals:
+    void removeAll();
+
 private:
     Ui::MainWindow *ui;
     int busyTime[1440];
     DB db;
+    bool addTaskToDataBase(int timeStart, int timeEnd, QString text, int day);
+    QString path = "C:/Users/ASZA-LAPTOP/Documents/dataBase.db";
+    QDate currentDate = QDate::currentDate();
+    void getValueFromDb();
 };
 #endif // MAINWINDOW_H

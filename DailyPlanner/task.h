@@ -24,6 +24,8 @@ private:
 
 private slots:
     void buttonClicked();
+public slots:
+    void removeAllSlot();
 };
 
 #endif // MYFRAME_H

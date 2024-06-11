@@ -36,6 +36,7 @@ bool DB::createTable(const QString &tableName, const QStringList &fields) {
 bool DB::insertData(const QString &tableName, const QStringList &values) {
     QSqlQuery query(m_db);
     QString queryString = "INSERT INTO " + tableName + " VALUES (" + values.join(", ") + ")";
+    qInfo()<< queryString;
     return query.exec(queryString);
 }
 

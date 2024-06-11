@@ -1,4 +1,5 @@
 #include "task.h"
+#include <QDebug>
 
 Task::Task(QWidget *parent, QString taskText, QString timeText)
     : QFrame(parent)
@@ -32,6 +33,11 @@ Task::~Task()
 }
 
 void Task::buttonClicked()
+{
+    delete this;
+}
+
+void Task::removeAllSlot()
 {
     delete this;
 }

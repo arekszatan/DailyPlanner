@@ -49,6 +49,7 @@ bool DB::updateData(const QString &tableName, const QStringList &fields, const Q
 bool DB::deleteData(const QString &tableName, const QString &condition) {
     QSqlQuery query(m_db);
     QString queryString = "DELETE FROM " + tableName + " WHERE " + condition;
+    qInfo() << queryString;
     return query.exec(queryString);
 }
 

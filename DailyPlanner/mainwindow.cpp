@@ -1,5 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,7 +27,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::rmDbItem(Task *task)
 {
-    qInfo() << task->getIndexTime();
+    if (db.connect(path))
+    {
+        QString condition = "startTime=" + QString::number(task->getIndexTime()) + " AND days=" + QString::number(task->getDaySince());
+        db.deleteData("tasks", condition);
+        qInfo() << "xddddddddddddddd" << task->getIndexTime() << task->getDaySince();
+        db.disconnect();
+    }
+
 }
 
 
@@ -76,7 +88,7 @@ void MainWindow::on_addDayWindow1_clicked()
         return;
     }
     QString timeText = startTime.toString("HH:mm") + "->" + endTime.toString("HH:mm");
-    Task *task = new Task(nullptr, ui->textWindow1->text(), timeText, startTimeInt);
+    Task *task = new Task(nullptr, ui->textWindow1->text(), timeText, startTimeInt, julianDay);
     connect(this, &MainWindow::removeAll, task, &Task::removeAllSlot);
     connect(task, &Task::removeFromDb, this, &MainWindow::rmDbItem);
     ui->day1layout->insertWidget(getIndexToSort(ui->day1layout, startTimeInt), task);
@@ -109,9 +121,10 @@ void MainWindow::on_addDayWindow2_clicked()
         return;
     }
     QString timeText = startTime.toString("HH:mm") + "->" + endTime.toString("HH:mm");
-    Task *task = new Task(nullptr, ui->textWindow2->text(), timeText, startTimeInt);
+    Task *task = new Task(nullptr, ui->textWindow2->text(), timeText, startTimeInt, julianDay);
     connect(this, &MainWindow::removeAll, task, &Task::removeAllSlot);
-    ui->day2layout->addWidget(task);
+    connect(task, &Task::removeFromDb, this, &MainWindow::rmDbItem);
+    ui->day2layout->insertWidget(getIndexToSort(ui->day2layout, startTimeInt), task);
     ui->textWindow2->clear();
 }
 
@@ -141,9 +154,10 @@ void MainWindow::on_addDayWindow3_clicked()
         return;
     }
     QString timeText = startTime.toString("HH:mm") + "->" + endTime.toString("HH:mm");
-    Task *task = new Task(nullptr, ui->textWindow3->text(), timeText, startTimeInt);
+    Task *task = new Task(nullptr, ui->textWindow3->text(), timeText, startTimeInt, julianDay);
     connect(this, &MainWindow::removeAll, task, &Task::removeAllSlot);
-    ui->day3layout->addWidget(task);
+    connect(task, &Task::removeFromDb, this, &MainWindow::rmDbItem);
+    ui->day3layout->insertWidget(getIndexToSort(ui->day3layout, startTimeInt), task);
     ui->textWindow3->clear();
 }
 
@@ -208,35 +222,91 @@ void MainWindow::getValueFromDb()
         QList<QList<QString>> data = db.fetchData("tasks");
         int julianDay = currentDate.toJulianDay();
         for (const auto &row : data) {
-            if (julianDay - 1 == row.at(3).toInt()) // actual
+            if (julianDay - 1 == row.at(3).toInt()) // prev
             {
                 QTime startTime = QTime(row.at(0).toInt() / 60, row.at(0).toInt() % 60);
                 QTime endTime = QTime(row.at(1).toInt() / 60, row.at(1).toInt() % 60);
                 QString timeText = startTime.toString("HH:mm") + "->" + endTime.toString("HH:mm");
-                Task *task = new Task(nullptr, row.at(2), timeText, row.at(0).toInt());
+                Task *task = new Task(nullptr, row.at(2), timeText, row.at(0).toInt(), row.at(3).toInt());
                 connect(this, &MainWindow::removeAll, task, &Task::removeAllSlot);
-                ui->day1layout->addWidget(task);
+                connect(task, &Task::removeFromDb, this, &MainWindow::rmDbItem);
+                ui->day1layout->insertWidget(getIndexToSort(ui->day1layout, row.at(0).toInt()), task);
             }
-            else if (julianDay == row.at(3).toInt()) // prev
+            else if (julianDay == row.at(3).toInt()) // act
             {
                 QTime startTime = QTime(row.at(0).toInt() / 60, row.at(0).toInt() % 60);
                 QTime endTime = QTime(row.at(1).toInt() / 60, row.at(1).toInt() % 60);
                 QString timeText = startTime.toString("HH:mm") + "->" + endTime.toString("HH:mm");
-                Task *task = new Task(nullptr, row.at(2), timeText, row.at(0).toInt());
+                Task *task = new Task(nullptr, row.at(2), timeText, row.at(0).toInt(), row.at(3).toInt());
                 connect(this, &MainWindow::removeAll, task, &Task::removeAllSlot);
-                ui->day2layout->addWidget(task);
+                connect(task, &Task::removeFromDb, this, &MainWindow::rmDbItem);
+                ui->day2layout->insertWidget(getIndexToSort(ui->day2layout, row.at(0).toInt()), task);
             }
             else if (julianDay + 1 == row.at(3).toInt()) // next
             {
                 QTime startTime = QTime(row.at(0).toInt() / 60, row.at(0).toInt() % 60);
                 QTime endTime = QTime(row.at(1).toInt() / 60, row.at(1).toInt() % 60);
                 QString timeText = startTime.toString("HH:mm") + "->" + endTime.toString("HH:mm");
-                Task *task = new Task(nullptr, row.at(2), timeText, row.at(0).toInt());
+                Task *task = new Task(nullptr, row.at(2), timeText, row.at(0).toInt(), row.at(3).toInt());
                 connect(this, &MainWindow::removeAll, task, &Task::removeAllSlot);
-                ui->day3layout->addWidget(task);
+                connect(task, &Task::removeFromDb, this, &MainWindow::rmDbItem);
+                ui->day3layout->insertWidget(getIndexToSort(ui->day3layout, row.at(0).toInt()), task);
             }
         }
         db.disconnect();
     }
+}
+
+void MainWindow::exportDataToFile(QDate date)
+{
+    QString dateStr = date.toString("yyyy-MM-dd");
+    QString fileName = QFileDialog::getSaveFileName(nullptr, "Save File", dateStr, "Text Files (*.txt)");
+    std::ofstream outputFile(fileName.toStdString());
+    if (!outputFile.is_open())
+    {
+        std::cerr << "Failed to open file for writing." << std::endl;
+        return;
+    }
+    outputFile << dateStr.toStdString() << std::endl;
+    outputFile <<"Index\tPoczątek czasu\tKoniec czasu\tZadanie"  << std::endl;
+    if (db.connect(path))
+    {
+        int julianDay = date.toJulianDay();
+        QList<QList<QString>> data = db.fetchData("tasks");
+        int index = 1;
+        for (const auto &row : data)
+        {
+            if (julianDay  == row.at(3).toInt())
+            {
+                QTime startTime = QTime(row.at(0).toInt() / 60, row.at(0).toInt() % 60);
+                QString startTimeText = startTime.toString("HH:mm");
+                QTime endTime = QTime(row.at(1).toInt() / 60, row.at(1).toInt() % 60);
+                QString endTimeText = startTime.toString("HH:mm");
+                outputFile << index << "\t" << startTimeText.toStdString() << "\t" << endTimeText.toStdString() << "\t" << row.at(2).toStdString()<< std::endl;
+                index++;
+            }
+        }
+        db.disconnect();
+    }
+    outputFile.close();
+    std::cout << "Data exported to " << "output.txt" << " successfully." << std::endl;
+}
+
+
+void MainWindow::on_generate1_clicked()
+{
+    exportDataToFile(currentDate.addDays(-1));
+}
+
+
+void MainWindow::on_generate2_clicked()
+{
+    exportDataToFile(currentDate);
+}
+
+
+void MainWindow::on_generate3_clicked()
+{
+    exportDataToFile(currentDate.addDays(1));
 }
 

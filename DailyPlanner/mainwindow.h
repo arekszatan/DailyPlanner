@@ -33,6 +33,12 @@ private slots:
 
     void on_addDayWindow3_clicked();
 
+    void on_generate1_clicked();
+
+    void on_generate2_clicked();
+
+    void on_generate3_clicked();
+
 signals:
     void removeAll();
 
@@ -45,5 +51,6 @@ private:
     QString path = "C:/Users/ASZA-LAPTOP/Documents/dataBase.db";
     int getIndexToSort(QHBoxLayout *layout, int timeActualItem);
     void getValueFromDb();
+    void exportDataToFile(QDate date);
 };
 #endif // MAINWINDOW_H

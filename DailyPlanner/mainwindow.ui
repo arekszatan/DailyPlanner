@@ -30,8 +30,8 @@
 QWidget {
     background-color: #F0F0F0;
     font-family: Arial, sans-serif;
-    font-size: 20px;
-    color: #333333;
+    font-size: 15px;
+    color: #2c3e50;
 }
 
 
@@ -43,7 +43,7 @@ QPushButton {
     background-color: #4CAF50;
     border: none;
     color: white;
-    padding: 10px 20px;
+    padding: 10px 10px;
     text-align: center;
     text-decoration: none;
     font-size: 14px;
@@ -135,7 +135,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     <item row="0" column="0">
      <widget class="QWidget" name="days" native="true">
       <property name="styleSheet">
-       <string notr="true">#days{background-color:red;}</string>
+       <string notr="true"/>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -157,33 +157,6 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
              </size>
             </property>
             <layout class="QGridLayout" name="gridLayout_2">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label">
-               <property name="text">
-                <string>Od kiedy:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="7" column="0">
-              <widget class="QPushButton" name="addDayWindow1">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>+</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_2">
-               <property name="text">
-                <string>Do kiedy:</string>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="0">
               <widget class="QTimeEdit" name="timeStartWindow1">
                <property name="sizePolicy">
@@ -194,6 +167,13 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                </property>
                <property name="displayFormat">
                 <string>HH:mm</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>Do kiedy:</string>
                </property>
               </widget>
              </item>
@@ -210,6 +190,20 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                </property>
               </widget>
              </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>Od kiedy:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Treść zadania:</string>
+               </property>
+              </widget>
+             </item>
              <item row="5" column="0">
               <widget class="QLineEdit" name="textWindow1">
                <property name="sizePolicy">
@@ -220,10 +214,16 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                </property>
               </widget>
              </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="label_7">
+             <item row="7" column="0">
+              <widget class="QPushButton" name="addDayWindow1">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
-                <string>Treść zadania:</string>
+                <string>+</string>
                </property>
               </widget>
              </item>
@@ -251,15 +251,40 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="dayLabel1">
-            <property name="styleSheet">
-             <string notr="true">QLabel{
-	background-color:#aaa;
+           <widget class="QWidget" name="widget_4" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="QLabel" name="dayLabel1">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLabel{
+	background-color:#81C784;
+    border: 2px solid #CCCCCC;
+    border-radius: 10px;
+	padding:10px;
 }</string>
-            </property>
-            <property name="text">
-             <string>-</string>
-            </property>
+               </property>
+               <property name="text">
+                <string>-</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="generate1">
+               <property name="text">
+                <string>Wygeneruj</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
           <item>
@@ -283,55 +308,6 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
           <item>
            <widget class="QWidget" name="addedWindow2" native="true">
             <layout class="QGridLayout" name="gridLayout_3">
-             <item row="1" column="0">
-              <widget class="QTimeEdit" name="timeStartWindow2">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="displayFormat">
-                <string>HH:mm</string>
-               </property>
-              </widget>
-             </item>
-             <item row="6" column="0">
-              <widget class="QPushButton" name="addDayWindow2">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>+</string>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="0">
-              <widget class="QLineEdit" name="textWindow2">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QTimeEdit" name="timeEndWindow2">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="displayFormat">
-                <string>HH:mm</string>
-               </property>
-              </widget>
-             </item>
              <item row="2" column="0">
               <widget class="QLabel" name="label_4">
                <property name="text">
@@ -350,6 +326,55 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
               <widget class="QLabel" name="label_8">
                <property name="text">
                 <string>Treść zadania:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QTimeEdit" name="timeEndWindow2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="displayFormat">
+                <string>HH:mm</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLineEdit" name="textWindow2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QPushButton" name="addDayWindow2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>+</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QTimeEdit" name="timeStartWindow2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="displayFormat">
+                <string>HH:mm</string>
                </property>
               </widget>
              </item>
@@ -377,15 +402,40 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="dayLabel2">
-            <property name="styleSheet">
-             <string notr="true">QLabel{
-	background-color:#aaa;
+           <widget class="QWidget" name="widget_5" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QLabel" name="dayLabel2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLabel{
+	background-color:#81C784;
+    border: 2px solid #CCCCCC;
+    border-radius: 10px;
+	padding:10px;
 }</string>
-            </property>
-            <property name="text">
-             <string>-</string>
-            </property>
+               </property>
+               <property name="text">
+                <string>-</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="generate2">
+               <property name="text">
+                <string>Wygeneruj</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
           <item>
@@ -409,23 +459,10 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
           <item>
            <widget class="QWidget" name="addedWindow3" native="true">
             <layout class="QGridLayout" name="gridLayout_4">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_5">
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_9">
                <property name="text">
-                <string>Od kiedy:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="6" column="0">
-              <widget class="QPushButton" name="addDayWindow3">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>+</string>
+                <string>Treść zadania:</string>
                </property>
               </widget>
              </item>
@@ -439,6 +476,16 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                </property>
                <property name="displayFormat">
                 <string>HH:mm</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLineEdit" name="textWindow3">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
                </property>
               </widget>
              </item>
@@ -462,20 +509,23 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                </property>
               </widget>
              </item>
-             <item row="5" column="0">
-              <widget class="QLineEdit" name="textWindow3">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string>Od kiedy:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QPushButton" name="addDayWindow3">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="label_9">
                <property name="text">
-                <string>Treść zadania:</string>
+                <string>+</string>
                </property>
               </widget>
              </item>
@@ -503,15 +553,40 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="dayLabel3">
-            <property name="styleSheet">
-             <string notr="true">QLabel{
-	background-color:#aaa;
+           <widget class="QWidget" name="widget_6" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QLabel" name="dayLabel3">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLabel{
+	background-color:#81C784;
+    border: 2px solid #CCCCCC;
+    border-radius: 10px;
+	padding:10px;
 }</string>
-            </property>
-            <property name="text">
-             <string>-</string>
-            </property>
+               </property>
+               <property name="text">
+                <string>-</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="generate3">
+               <property name="text">
+                <string>Wygeneruj</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
           <item>

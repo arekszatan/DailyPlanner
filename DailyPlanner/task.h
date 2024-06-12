@@ -11,16 +11,19 @@ class Task : public QFrame {
     Q_OBJECT
 
 public:
-    Task(QWidget *parent = nullptr, QString taskText = "None", QString timeText = "00:00", int indexTime = -1);
+    Task(QWidget *parent = nullptr, QString taskText = "None", QString timeText = "00:00", int indexTime = -1, int daySince = -1);
     ~Task();
     int getIndexTime();
+    int getDaySince();
 
 private:
     QString _taskText;
     QString _timeText;
+    int _daySince;
     QLabel *textLabel;
     QLabel *timeLabel;
-    QPushButton *editButton;
+    QLabel *etykieta1;
+    QLabel *etykieta2;
     QPushButton *deleteButton;
     QGridLayout *gridLayout;
     int _indexTime;

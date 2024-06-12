@@ -48,7 +48,7 @@ private:
     DB db;
     bool addTaskToDataBase(int timeStart, int timeEnd, QString text, int day);
     QDate currentDate = QDate::currentDate();
-    QString path = "C:/Users/ASZA-LAPTOP/Documents/dataBase.db";
+    QString path = QDir::currentPath() + "/dataBase.db";
     int getIndexToSort(QHBoxLayout *layout, int timeActualItem);
     void getValueFromDb();
     void exportDataToFile(QDate date);
